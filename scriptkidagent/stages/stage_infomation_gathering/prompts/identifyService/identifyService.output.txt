@@ -1,0 +1,37 @@
+After completing the analysis, you MUST output a service identification report in the specified format:
+
+<service_identification_report>
+  <service_name>...</service_name>
+  <service_version>...</service_version>
+  <port>...</port>
+  <ip>...</ip>
+  <protocol>...<protocol>
+  <additional_information>
+    ...
+  </additional_information>
+</service_identification_report>
+
+
+Detailed Instructions:
+
+<service_name></service_name>:
+Replace ... with the name of the service identified (e.g., nginx, mysql, apache).
+
+<service_version></service_version>:
+Replace ... with the version of the identified service (e.g., 1.21.4, 8.0.25).
+
+<port></port>:
+Replace ... with the port number on which the service is running (e.g., 80, 443, 3306).
+
+<ip></ip>:
+Replace ... with the IP address of the identified service (e.g., 192.168.1.1, 10.0.0.5).
+
+<protocol></protocol>:
+Replace ... with the protocol used by the service (e.g., tcp, udp, http, https).
+
+<additional_information></additional_information>:
+Use this section to provide additional details about the service, including but not limited to:
+Framework: Replace ... with the framework used by the service (e.g., Django, Flask).
+Configuration: Replace ... with key configuration details (e.g., "TLS enabled", "Max connections set to 100").
+Operating System: Replace ... with the operating system on which the service is running (e.g., Ubuntu 22.04, Windows Server 2019).
+Include any other relevant information, such as runtime environment (e.g., "running in Docker containers", "hosted on AWS EC2").

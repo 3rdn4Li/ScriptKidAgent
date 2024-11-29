@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "scriptkidagent"
+version = "0.1.0"
+description = ""
+authors = ["3rdn4Li <abcxiaoheiren@163.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pwntools = "^4.9.0"
+openai = "^1.45.0"
+
+[tool.poetry.scripts]
+scriptkid = "scriptkidagent.scriptkid:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
