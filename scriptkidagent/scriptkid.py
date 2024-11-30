@@ -77,7 +77,7 @@ def main():
     Entry point for the ScriptKidAgent command-line tool.
     """
     parser = argparse.ArgumentParser(description='ScriptKidAgent')
-    parser.add_argument('--ip_segment', type=str, help='IP segment to exploit (e.g., 192.168.1.0/24)')
+    parser.add_argument('--ip_segment', type=str, help='IP segment to exploit (e.g., 192.168.1.0/24) or single IP address, for test, you can use 127.0.0.1')
     args = parser.parse_args()
 
     scriptkid = ScriptKidAgent(args.ip_segment)
