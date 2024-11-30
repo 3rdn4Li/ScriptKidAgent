@@ -39,7 +39,7 @@ class ServiceReportParser(BaseParser):
         fix_llm = LLMFunction.create(
             'Fix the format of the current service identification report according to the format instructions.\n\n# CURRENT SERVICE IDENTIFICATION REPORT\n{{ info.current_report }}\n\n# OUTPUT FORMAT\n{{ info.output_format }}',
             model=self.recover_with,
-            use_loggers=True,
+            use_logging=True,
             temperature=0.0,
             include_usage=True
         )

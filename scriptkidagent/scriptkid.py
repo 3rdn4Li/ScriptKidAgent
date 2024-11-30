@@ -81,7 +81,7 @@ def main():
     args = parser.parse_args()
 
     scriptkid = ScriptKidAgent(args.ip_segment)
-    scriptkid.start(args.ip_segment)
+    scriptkid.start()
 
 
 if __name__ == '__main__':
