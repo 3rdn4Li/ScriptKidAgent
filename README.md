@@ -14,3 +14,21 @@ for example,
 ```
 scriptkid --ip_segment 127.0.0.1
 ```
+
+## In Docker
+### Build image
+```
+docker build -t scriptkid:latest .
+```
+
+### Run container
+```shell
+docker run --name scrikptkid \
+-it --rm \
+--pull never --privileged \
+--network host \
+-v "$(pwd)":/app:ro \
+--env-file=.env \
+--entrypoint /bin/bash \
+scriptkid:latest
+```

@@ -8,14 +8,17 @@ def execute_in_msfconsole(process, command: str) -> str:
     Executes a command in msfconsole and returns the result.
 
     Args:
-        process (subprocess.Popen): The msfconsole process.
+        process (process): The msfconsole process.
         command (str): The command to execute in msfconsole.
 
     Returns:
         str: The result of the command execution.
     """
     # this should be painful as we need to interact with a console with tty
-    return 'pass'
+    process.sendline(command)
+    process.expect('msf6 >')
+    output = process.before
+    return output
 
 
 @tools.tool
