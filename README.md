@@ -5,6 +5,7 @@ pip install -e .
 cd /path/to/ScriptKidAgent
 pip install -e .
 ```
+You should ensure that there is curl and nmap in the host machine.
 ## Usage
 ```
 scriptkid --ip_segment [ip_segment]
