@@ -32,7 +32,7 @@ COPY scriptkidagent /app/scriptkidagent
 COPY pyproject.toml /app/
 COPY README.md /app/
 RUN /venv/bin/pip install wheel
-RUN cd /app/agentlib && /venv/bin/pip install -e .
+RUN cd /app/agentlib && /venv/bin/pip install .
 RUN cd /app && /venv/bin/pip install -e .
 
 
