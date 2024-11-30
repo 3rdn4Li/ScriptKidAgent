@@ -1,5 +1,7 @@
 ## Installation
 ```
+cd /path/to/ScriptKidAgent/agentlib
+pip install -e .
 cd /path/to/ScriptKidAgent
 pip install -e .
 ```
