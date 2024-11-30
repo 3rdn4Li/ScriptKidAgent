@@ -1,10 +1,10 @@
 class ServiceReport:
-    def __init__(self, service_name: str, 
-                       service_version: str, 
-                       port: str, 
-                       additional_information: str,
-                       ip: str,
-                       protocol: str):
+    def __init__(self, service_name: str,
+                 service_version: str,
+                 port: str,
+                 additional_information: str,
+                 ip: str,
+                 protocol: str):
         """
         Initializes the ServiceReport object.
 
@@ -48,13 +48,14 @@ class ServiceReport:
             int: The hash value of the object.
         """
         return hash(str(self))
-    
+
+
 class VulnReport:
-    def __init__(self, service_report, 
-                       vulnerability_id: str, 
-                       vulnerability_description: str, 
-                       additional_information: str,
-                       ):
+    def __init__(self, service_report,
+                 vulnerability_id: str,
+                 vulnerability_description: str,
+                 additional_information: str,
+                 ):
         """
         Initializes the VulnReport object.
         
@@ -68,8 +69,7 @@ class VulnReport:
         self.vulnerability_id = vulnerability_id
         self.vulnerability_description = vulnerability_description
         self.additional_information = additional_information
-        
-        
+
     def __str__(self):
         """
         Converts the VulnReport object to a formatted string in the specified XML format.
@@ -84,7 +84,7 @@ class VulnReport:
         report += f'  {str(self.service_report)}\n'
         report += f'</vulnerability_identification_report>'
         return report
-        
+
     def __hash__(self):
         """
         Returns a hash value for the object based on its string representation.

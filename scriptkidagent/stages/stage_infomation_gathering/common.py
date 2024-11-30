@@ -6,6 +6,7 @@ from typing import Dict, List
 def is_root():
     return os.geteuid() == 0
 
+
 def scan_ip_segment(ip_segment: str) -> Dict[str, Dict[str, List[int]]]:
     """
     Scans the given IP segment using nmap to find all online hosts and their open ports for all protocols.

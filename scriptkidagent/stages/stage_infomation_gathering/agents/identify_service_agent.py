@@ -9,7 +9,6 @@ TOOLS = {"execute_in_bash": execute_in_bash}
 
 
 class ServiceReportParser(BaseParser):
-    
     # Extra cost that we need to keep track when we do LLM calls
     llm_extra_calls_cost = 0
 
@@ -17,7 +16,8 @@ class ServiceReportParser(BaseParser):
     recover_with = 'gpt-4o-mini'
 
     # This is the output format that describes the output of service identification
-    __OUTPUT_DESCRIPTION = str(Path(__file__).resolve().parent.parent / 'prompts/identifyService/identifyService.output.txt')
+    __OUTPUT_DESCRIPTION = str(
+        Path(__file__).resolve().parent.parent / 'prompts/identifyService/identifyService.output.txt')
 
     def get_format_instructions(self) -> str:
         """
@@ -31,7 +31,7 @@ class ServiceReportParser(BaseParser):
         Entry point to parse the service identification output.
         """
         return self.parse(msg['output'])
-    
+
     def fix_format(self, text: str) -> str:
         """
         Uses LLM to fix the format of the current service identification report.
@@ -120,22 +120,25 @@ class ServiceReportParser(BaseParser):
                     return service_info
                 except Exception as e:
                     print(f'🤡 Regexp-Error: Error parsing the service identification report - {e}')
-                    print(f'🤡 Regexp-Error: Trying to fix the format of the service identification report... Attempt {try_itr}!')
+                    print(
+                        f'🤡 Regexp-Error: Trying to fix the format of the service identification report... Attempt {try_itr}!')
                     text = self.fix_format(text)
             else:
                 print(f'🤡 Regexp-Error: Could not parse the service identification report from the output!')
-                print(f'🤡 Regexp-Error: Trying to fix the format of the service identification report... Attempt {try_itr}!')
+                print(
+                    f'🤡 Regexp-Error: Trying to fix the format of the service identification report... Attempt {try_itr}!')
                 text = self.fix_format(text)
             try_itr += 1
 
         raise Exception('Failed to parse the service identification report after multiple attempts!')
-    
 
-class IdentifyServiceAgent(AgentWithHistory[dict,str]):
+
+class IdentifyServiceAgent(AgentWithHistory[dict, str]):
     __LLM_MODEL__ = 'gpt-4o'
     current_file_path = Path(__file__).resolve()
 
-    __SYSTEM_PROMPT_TEMPLATE__ = str(current_file_path.parent.parent / 'prompts/identifyService/identifyService.system.j2')
+    __SYSTEM_PROMPT_TEMPLATE__ = str(
+        current_file_path.parent.parent / 'prompts/identifyService/identifyService.system.j2')
     __USER_PROMPT_TEMPLATE__ = str(current_file_path.parent.parent / 'prompts/identifyService/identifyService.user.j2')
     __OUTPUT_PARSER__ = ServiceReportParser
     __MAX_TOOL_ITERATIONS__ = 10
@@ -171,6 +174,6 @@ class IdentifyServiceAgent(AgentWithHistory[dict,str]):
         # Taking into account the extra calls cost for recoveries from verification errors
         total_cost += self.extra_calls_cost
         return total_cost
-    
+
     def get_available_tools(self):
         return TOOLS.values()

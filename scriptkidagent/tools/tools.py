@@ -2,6 +2,7 @@ from pwn import *
 import subprocess
 from agentlib.lib import tools
 
+
 def execute_in_msfconsole(process, command: str) -> str:
     """
     Executes a command in msfconsole and returns the result.
@@ -15,6 +16,7 @@ def execute_in_msfconsole(process, command: str) -> str:
     """
     # this should be painful as we need to interact with a console with tty
     return 'pass'
+
 
 @tools.tool
 def execute_in_bash(command: str) -> str:
@@ -67,7 +69,7 @@ def execute_in_bash(command: str) -> str:
             if len(stderr) > MAX_OUT_LEN:
                 stderr = stderr[:MAX_OUT_LEN] + '\n<Stderr Output truncated>'
             output += f"##Stderr\n```\n{stderr}\n```\n"
-        
+
         return output
     except Exception as e:
         return f'Error running command: {e}'
