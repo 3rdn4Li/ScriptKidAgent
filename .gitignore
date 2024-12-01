@@ -4,3 +4,4 @@ pipeline.lock
 .idea
 scriptkidagent/volumes
 .env
+.vscode

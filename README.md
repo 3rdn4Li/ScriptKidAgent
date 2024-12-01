@@ -39,7 +39,6 @@ docker run --name scrikptkid \
 -it --rm \
 --pull never --privileged \
 --network pentest \
--v "$(pwd)":/app:ro \
 --env-file=.env \
 --entrypoint /bin/bash \
 scriptkid:latest
