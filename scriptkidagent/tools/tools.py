@@ -15,10 +15,22 @@ def execute_in_msfconsole(process, command: str) -> str:
         str: The result of the command execution.
     """
     # this should be painful as we need to interact with a console with tty
+    lines = ''
     process.sendline(command)
-    process.expect('msf6 >')
-    output = process.before
-    return output
+    while True:
+        try:
+            line = process.recvline()
+        except Exception as e:
+            line = str(e)
+            lines += line
+            break
+        # maybe do some cleaning since there are some weird control characters
+        line = line.decode('utf-8')
+        lines += line
+        # maybe more sophisticated because when we get a shell we don't get msf6 >, and some commands may modify the prompt (prompt for shell like msf6 >, not prompt for llm)            
+        if 'msf6' in line and '>' in line:
+            break
+    return lines
 
 
 @tools.tool
