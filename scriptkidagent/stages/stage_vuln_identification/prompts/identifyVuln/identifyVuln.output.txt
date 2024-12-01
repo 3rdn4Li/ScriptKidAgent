@@ -1,0 +1,49 @@
+After completing the analysis, you MUST output a vulnerability identification report in the specified format:
+
+<vulnerability_identification_report>
+  <vulnerability_id>...</vulnerability_id>
+  <vulnerability_description>...</vulnerability_description>
+  <capabilities>
+    <capability>...</capability>
+    <capability>...</capability>
+    ...
+  </capabilities>
+  <additional_information>
+    How to exploit in Metasploit: ...
+    How to exploit using exploitdb to exploit: ...
+    Framework: ...
+    Configuration: ...
+    Operating System: ...
+    Environment: ...
+    Affected Versions: ...
+    Patch Availability: ...
+    Exploitation Details: ...
+    ...
+  </additional_information>
+</vulnerability_identification_report>
+Detailed Instructions
+
+<vulnerability_id></vulnerability_id>:
+Replace ... with the ID of the identified vulnerability (e.g., CVE-2022-1234, CNVD-2022-5678). If you cannot identify any possible vulnerability, put 'UNKNOWN' in this field.
+
+<vulnerability_description></vulnerability_description>:
+Replace ... with a brief description of the vulnerability and its potential impact (e.g., "Buffer overflow in the HTTP header parser allows remote code execution.").
+
+<capabilities></capabilities>:
+Replace ... with one or more capabilities the vulnerability provides:
+
+<capability>Privilege escalation</capability>: If the vulnerability allows escalating privileges.
+<capability>Remote code execution</capability>: If the vulnerability allows executing arbitrary code remotely.
+<capability>Information disclosure</capability>: If the vulnerability leaks sensitive information.
+<additional_information></additional_information>:
+Use this section to provide additional relevant details about the vulnerability:
+
+How to exploit in Metasploit: Does Metasploit support this vulnerability and how to exploit it in Metasploit.
+How to exploit in Metasploit: Does exploitdb support this vulnerability and how to exploit it with exploitdb.
+Framework: If applicable, include the framework related to the vulnerability (e.g., Django, Flask).
+Configuration: Provide any key configuration details contributing to the vulnerability (e.g., "TLS disabled", "Weak password policy").
+Operating System: Specify the OS where the service is running (e.g., Ubuntu 22.04, Windows Server 2019).
+Environment: Include runtime or hosting environment information (e.g., "running in Docker containers", "hosted on AWS EC2").
+Affected Versions: Mention all versions affected by the vulnerability.
+Patch Availability: Indicate if a patch or mitigation is available (e.g., "Patch available as of version 1.2.3").
+Exploitation Details: Provide any known details about how the vulnerability can be exploited.

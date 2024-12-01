@@ -53,6 +53,7 @@ class ServiceReport:
 class VulnReport:
     def __init__(self, service_report,
                  vulnerability_id: str,
+                 capabilities: str,
                  vulnerability_description: str,
                  additional_information: str,
                  ):
@@ -67,6 +68,7 @@ class VulnReport:
         """
         self.service_report = service_report
         self.vulnerability_id = vulnerability_id
+        self.capabilities = capabilities    
         self.vulnerability_description = vulnerability_description
         self.additional_information = additional_information
 
@@ -80,6 +82,7 @@ class VulnReport:
         report = f'<vulnerability_identification_report>\n'
         report += f'  <vulnerability_id>{self.vulnerability_id}</vulnerability_id>\n'
         report += f'  <vulnerability_description>{self.vulnerability_description}</vulnerability_description>\n'
+        report += f'  <capabilities>{self.capabilities}</capabilities>\n'
         report += f'  <additional_information>\n    {self.additional_information}\n  </additional_information>\n'
         report += f'  {str(self.service_report)}\n'
         report += f'</vulnerability_identification_report>'
