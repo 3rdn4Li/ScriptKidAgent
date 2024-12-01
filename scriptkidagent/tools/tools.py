@@ -39,7 +39,7 @@ def execute_in_bash(command: str) -> str:
             stderr=subprocess.PIPE
         )
         try:
-            stdout, stderr = p.communicate(timeout=60)
+            stdout, stderr = p.communicate(timeout=10)
         except subprocess.TimeoutExpired:
             p.kill()  # Kill the process if timeout expires
             try:

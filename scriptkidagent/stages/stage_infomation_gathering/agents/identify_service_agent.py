@@ -58,11 +58,6 @@ class ServiceReportParser(BaseParser):
         """
         Extracts the service identification information from the given report.
         """
-        # Extract <ip>
-        ip_match = re.search(r'<ip>(.*?)</ip>', report, re.DOTALL)
-        if not ip_match:
-            raise Exception('IP address not found in the report!')
-        ip = ip_match.group(1).strip()
 
         # Extract <protocol>
         protocol_match = re.search(r'<protocol>(.*?)</protocol>', report, re.DOTALL)
@@ -82,11 +77,6 @@ class ServiceReportParser(BaseParser):
             raise Exception('Service version not found in the report!')
         service_version = service_version_match.group(1).strip()
 
-        # Extract <port>
-        port_match = re.search(r'<port>(.*?)</port>', report, re.DOTALL)
-        if not port_match:
-            raise Exception('Port not found in the report!')
-        port = port_match.group(1).strip()
 
         # Extract <additional_information>
         additional_info_match = re.search(r'<additional_information>(.*?)</additional_information>', report, re.DOTALL)
@@ -96,11 +86,9 @@ class ServiceReportParser(BaseParser):
 
         # Combine extracted information
         service_report = {
-            "ip": ip,
             "protocol": protocol,
             "service_name": service_name,
             "service_version": service_version,
-            "port": port,
             "additional_information": additional_info
         }
 

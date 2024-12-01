@@ -3,8 +3,6 @@ After completing the analysis, you MUST output a service identification report i
 <service_identification_report>
   <service_name>...</service_name>
   <service_version>...</service_version>
-  <port>...</port>
-  <ip>...</ip>
   <protocol>...<protocol>
   <additional_information>
     ...
@@ -15,16 +13,10 @@ After completing the analysis, you MUST output a service identification report i
 Detailed Instructions:
 
 <service_name></service_name>:
-Replace ... with the name of the service identified (e.g., nginx, mysql, apache).
+Replace ... with the name of the service identified (e.g., nginx, mysql, apache). If you cannot identify the service name, put 'UNKNOWN' in this field.
 
 <service_version></service_version>:
-Replace ... with the version of the identified service (e.g., 1.21.4, 8.0.25).
-
-<port></port>:
-Replace ... with the port number on which the service is running (e.g., 80, 443, 3306).
-
-<ip></ip>:
-Replace ... with the IP address of the identified service (e.g., 192.168.1.1, 10.0.0.5).
+Replace ... with the version of the identified service (e.g., 1.21.4, 8.0.25).  If you cannot identify the service version, put 'UNKNOWN' in this field.
 
 <protocol></protocol>:
 Replace ... with the protocol used by the service (e.g., tcp, udp, http, https).
