@@ -7,7 +7,10 @@ cd /path/to/ScriptKidAgent
 pip install -e .
 ```
 
-You should ensure that there is metasploit, curl and nmap in the host machine.
+You should ensure that there is metasploit and nmap are in the host machine.
+The more pre-installed tools are in the host, the better performance scriptkid can achieve (just like a real scriptkid)!
+For example, curl and searchsploit are recommended.
+
 
 ## Usage
 
