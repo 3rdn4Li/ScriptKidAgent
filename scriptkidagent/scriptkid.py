@@ -91,6 +91,7 @@ class ScriptKidAgent:
         for ip, port_to_vuln_report in self.ip_to_port_to_vuln_reports.items():
             for port, vuln_report in port_to_vuln_report.items():
                 exploit_agent = ExploitAgent(ip, vuln_report.service_report.port, vuln_report)
+                exploit_agent.exploit()
 
         # # for lateral movement
         # while self.ip_to_new_shell:
