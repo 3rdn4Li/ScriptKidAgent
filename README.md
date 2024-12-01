@@ -11,7 +11,6 @@ You should ensure that there is metasploit and nmap are in the host machine.
 The more pre-installed tools are in the host, the better performance scriptkid can achieve (just like a real scriptkid)!
 For example, curl and searchsploit are recommended.
 
-
 ## Usage
 
 ```
@@ -49,4 +48,20 @@ scriptkid:latest
 ```shell
 docker pull tleemcjr/metasploitable2
 docker run --network=pentest -h victim -it --rm --name metasploitable2 tleemcjr/metasploitable2
+```
+
+### test
+
+#### test_execute_command_success
+
+```shell
+# in metasploitable
+# run ifconfig to get the ip address
+# use the ip address to replace the ip
+```
+
+Then run
+
+```shell
+python -m unittest discover tests
 ```
