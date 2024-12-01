@@ -13,8 +13,8 @@ class ScriptKidAgent:
     def __init__(self, ip_segment: str):
         self.total_cost = 0
         self.ip_segment = ip_segment
-        self.ip_to_service_reports = {}
-        self.ip_to_vuln_reports = {}
+        self.ip_to_port_to_service_reports = {}
+        self.ip_to_port_to_vuln_reports = {}
         self.ip_to_protocol_to_ports = {}
         # ip to process object that is a shell
         self.ip_to_shell = {}
@@ -46,20 +46,20 @@ class ScriptKidAgent:
                             ip=str(ip),
                             protocol=service_report_raw["protocol"]
                         )
-                        if ip not in self.ip_to_service_reports:
-                            self.ip_to_service_reports[ip] = dict()
-                        self.ip_to_service_reports[ip][port] = service_report
+                        if ip not in self.ip_to_port_to_service_reports:
+                            self.ip_to_port_to_service_reports[ip] = dict()
+                        self.ip_to_port_to_service_reports[ip][port] = service_report
         
         # Save the service reports to a file
         if os.path.exists("service_reports.txt"):
             os.remove("service_reports.txt")
         with open("service_reports.txt", "w+") as f:
-            for ip, port_to_service_report in self.ip_to_service_reports.items():
+            for ip, port_to_service_report in self.ip_to_port_to_service_reports.items():
                 for port, service_report in port_to_service_report.items():
                     f.write(f"{ip}:{port}\n")
                     f.write(f"{service_report}\n\n")
 
-        for ip, port_to_service_report in self.ip_to_service_reports.items():
+        for ip, port_to_service_report in self.ip_to_port_to_service_reports.items():
             for port, service_report in port_to_service_report.items():
                 identify_vuln_agent = IdentifyVulnAgent(SERVICE_REPORT_STR=str(service_report))
                 res = identify_vuln_agent.invoke()
@@ -68,27 +68,27 @@ class ScriptKidAgent:
                 
                 if vuln_report_raw and vuln_report_raw["vulnerability_id"].lower() != "unknown":
                     vuln_report = VulnReport(
-                        service_report=self.ip_to_service_reports[ip][port],
+                        service_report=self.ip_to_port_to_service_reports[ip][port],
                         vulnerability_id=vuln_report_raw["vulnerability_id"],
                         capabilities=vuln_report_raw["capabilities"],
                         vulnerability_description=vuln_report_raw["vulnerability_description"],
                         additional_information=vuln_report_raw["additional_information"]
                     )
-                    if ip not in self.ip_to_vuln_reports:
-                        self.ip_to_vuln_reports[ip] = dict()
-                    self.ip_to_vuln_reports[ip][port] = service_report
+                    if ip not in self.ip_to_port_to_vuln_reports:
+                        self.ip_to_port_to_vuln_reports[ip] = dict()
+                    self.ip_to_port_to_vuln_reports[ip][port] = vuln_report
         
         # Save the vuln reports to a file
         if os.path.exists("vuln_reports.txt"):
             os.remove("vuln_reports.txt")
         with open("vuln_reports.txt", "w+") as f:
-            for ip, port_to_vuln_report in self.ip_to_vuln_reports.items():
+            for ip, port_to_vuln_report in self.ip_to_port_to_vuln_reports.items():
                 for port, vuln_report in port_to_vuln_report.items():
                     f.write(f"{ip}:{port}\n")
                     f.write(f"{vuln_report}\n\n")
 
-
-        for ip, port_to_vuln_report in self.ip_to_vuln_reports.items():
+        breakpoint()
+        for ip, port_to_vuln_report in self.ip_to_port_to_vuln_reports.items():
             for port, vuln_report in port_to_vuln_report.items():
                 exploit_agent = ExploitAgent(ip, vuln_report.service_report.port, vuln_report)
 
