@@ -7,7 +7,7 @@ pip install -e .
 ```
 You should ensure that there is metasploit and nmap are in the host machine.
 The more pre-installed tools are in the host, the better performance scriptkid can achieve (just like a real scriptkid)!
-For example, curl and exploitdb are recommended.
+For example, curl and searchsploit are recommended.
 ## Usage
 ```
 scriptkid --ip_segment [ip_segment]
