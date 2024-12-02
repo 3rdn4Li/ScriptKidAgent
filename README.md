@@ -48,9 +48,13 @@ scriptkid:latest
 ```shell
 docker pull tleemcjr/metasploitable2
 docker run --network=pentest --ip 172.19.0.2 -h victim -d --rm --name metasploitable2 tleemcjr/metasploitable2
-docker run --network=pentest --ip 172.19.0.3 -h victim3 -d --rm --name metasploitable3 heywoodlh/vulnerable
+#docker run --network=pentest --ip 172.19.0.3 -h victim3 -d --rm --name metasploitable3 heywoodlh/vulnerable
+# metasploitable3 with vagrant
+mkdir metasploitable3-workspace
+cd metasploitable3-workspace
+curl -O https://raw.githubusercontent.com/rapid7/metasploitable3/master/Vagrantfile && vagrant up
 # check ip
-docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' metasploitable3
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' metasploitable2
 ```
 
 ### evaluate scriptkid
