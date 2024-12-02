@@ -23,13 +23,13 @@ for example,
 scriptkid --ip_segment 127.0.0.1
 ```
 
-## In Docker
+## Test metasploitable2&3 for example
 
 ```shell
-docker network create pentest
+docker network create --subnet=172.19.0.0/16 --gateway=172.19.0.1 pentest 
 ```
 
-### metasploit
+### setup scriptkid docker
 
 ```shell
 docker build -t scriptkid:latest .
@@ -43,14 +43,25 @@ docker run --name scrikptkid \
 scriptkid:latest
 ```
 
-### metasploitable
+### setup metasploitable 2&3
 
 ```shell
 docker pull tleemcjr/metasploitable2
-docker run --network=pentest -h victim -it --rm --name metasploitable2 tleemcjr/metasploitable2
+docker run --network=pentest --ip 172.19.0.2 -h victim -d --rm --name metasploitable2 tleemcjr/metasploitable2
+docker run --network=pentest --ip 172.19.0.3 -h victim3 -d --rm --name metasploitable3 heywoodlh/vulnerable
+# check ip
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' metasploitable3
 ```
 
-### test
+### evaluate scriptkid
+
+You can use the ip to replace the ip_segment
+
+```shell
+scriptkid --ip_segment 172.19.0.0/24
+```
+
+### unittest
 
 #### test_execute_command_success
 
