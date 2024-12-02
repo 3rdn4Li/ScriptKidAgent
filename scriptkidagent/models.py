@@ -118,7 +118,7 @@ class ExpReport:
         """
         self.service_report = service_report
         self.vulnerability_report = vulnerability_report
-        self.is_success=is_success
+        self.is_success = is_success
         self.capabilities = capabilities
         self.if_shell = if_shell
         self.if_root = if_root
@@ -133,6 +133,7 @@ class ExpReport:
         """
         report = f'<exploitation_report>\n'
         report += f'  <exploitation_capabilities>{self.capabilities}</exploitation_capabilities>\n'
+        report += f'  <exploitation_issuccess>{self.is_success}</exploitation_issuccess>\n'
         report += f'  <exploitation_ifshell>{self.if_shell}</exploitation_ifshell>\n'
         report += f'  <exploitation__ifroot>{self.if_root}</exploitation_ifroot>\n'
         report += f'  <exploitation_message_history>\n    {str(self.message_history)}\n  </exploitation_message_history>\n'

@@ -96,7 +96,7 @@ class ScriptKidAgent:
                 exp_report = ExpReport(
                     service_report=self.ip_to_port_to_service_reports[ip][port],
                     vulnerability_report=self.ip_to_port_to_vuln_reports[ip][port],
-                    if_success=exp_success,
+                    is_success=exp_success,
                     capabilities=exp_temp_report["capabilities"],
                     if_shell=exp_temp_report["if_shell"],
                     if_root=exp_temp_report["if_root"],
