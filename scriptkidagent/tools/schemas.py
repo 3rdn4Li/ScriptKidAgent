@@ -15,7 +15,7 @@ schema_execute_in_msfconsole = {
 
 schema_finish_with_report ={
     "name": "finish_with_report",
-    "description": "Generates a final exploit report.",
+    "description": "Generates a final exploit report. Only call this function when the exploitation is successful, otherwise do not call this function.",
     "parameters": {
         "type": "object",
         "properties": {
