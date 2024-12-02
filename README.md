@@ -5,7 +5,11 @@ cd /path/to/ScriptKidAgent/agentlib
 pip install -e .
 cd /path/to/ScriptKidAgent
 pip install -e .
+cd /path/to/ScriptKidAgent/OpenHands
+pip install -e .
+playwright install
 ```
+May need some other environment fix and code fix to make it work.
 
 You should ensure that there is metasploit and nmap are in the host machine.
 The more pre-installed tools are in the host, the better performance scriptkid can achieve (just like a real scriptkid)!
