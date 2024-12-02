@@ -2,11 +2,11 @@ import re
 from agentlib import AgentWithHistory, LLMFunction
 from pathlib import Path
 from typing import Dict
-from scriptkidagent.tools.tools import execute_in_bash
+from scriptkidagent.tools.tools import execute_in_bash, search_in_web
 from agentlib.lib.common.parsers import BaseParser
 from scriptkidagent.models import ServiceReport
 
-TOOLS = {"execute_in_bash": execute_in_bash}
+TOOLS = {"execute_in_bash": execute_in_bash, "search_in_web": search_in_web}
 
 class VulnReportParser(BaseParser):
     # Extra cost that we need to keep track when we do LLM calls

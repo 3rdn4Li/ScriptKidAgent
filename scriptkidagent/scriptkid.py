@@ -87,7 +87,6 @@ class ScriptKidAgent:
                     f.write(f"{ip}:{port}\n")
                     f.write(f"{vuln_report}\n\n")
 
-        breakpoint()
         for ip, port_to_vuln_report in self.ip_to_port_to_vuln_reports.items():
             for port, vuln_report in port_to_vuln_report.items():
                 exploit_agent = ExploitAgent(ip, vuln_report.service_report.port, vuln_report)

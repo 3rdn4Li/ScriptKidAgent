@@ -1,0 +1,118 @@
+127.0.0.1:22
+<service_identification_report>
+  <service_name>OpenSSH</service_name>
+  <service_version>8.9p1</service_version>
+  <port>22</port>
+  <ip>127.0.0.1</ip>
+  <protocol>tcp</protocol>
+  <additional_information>
+    <framework>N/A</framework>
+    <configuration>Protocol 2.0</configuration>
+    <operating_system>Ubuntu Linux</operating_system>
+    <cpe>cpe:/o:linux:linux_kernel</cpe>
+  </additional_information>
+</service_identification_report>
+
+127.0.0.1:111
+<service_identification_report>
+  <service_name>rpcbind</service_name>
+  <service_version>2-4</service_version>
+  <port>111</port>
+  <ip>127.0.0.1</ip>
+  <protocol>tcp</protocol>
+  <additional_information>
+    <framework>UNKNOWN</framework>
+    <configuration>RPC #100000</configuration>
+    <operating_system>UNKNOWN</operating_system>
+  </additional_information>
+</service_identification_report>
+
+127.0.0.1:631
+<service_identification_report>
+  <service_name>CUPS</service_name>
+  <service_version>2.4</service_version>
+  <port>631</port>
+  <ip>127.0.0.1</ip>
+  <protocol>tcp</protocol>
+  <additional_information>
+    Framework: IPP/2.1
+    Configuration: 
+      - Content-Language: en_US
+      - Content-Type: text/html; charset=utf-8
+      - Keep-Alive: timeout=10
+      - X-Frame-Options: DENY
+      - Content-Security-Policy: frame-ancestors 'none'
+    Operating System: UNKNOWN
+  </additional_information>
+</service_identification_report>
+
+127.0.0.1:9000
+<service_identification_report>
+  <service_name>ZeroMQ</service_name>
+  <service_version>ZMTP 2.0</service_version>
+  <port>9000</port>
+  <ip>127.0.0.1</ip>
+  <protocol>tcp</protocol>
+  <additional_information>
+    <framework>ZeroMQ</framework>
+    <configuration>Default configuration</configuration>
+    <operating_system>UNKNOWN</operating_system>
+  </additional_information>
+</service_identification_report>
+
+127.0.0.1:9001
+<service_identification_report>
+  <service_name>ZeroMQ</service_name>
+  <service_version>ZMTP 2.0</service_version>
+  <port>9001</port>
+  <ip>127.0.0.1</ip>
+  <protocol>tcp</protocol>
+  <additional_information>
+    <framework>ZeroMQ</framework>
+    <configuration>ZeroMQ Message Transport Protocol (ZMTP) 2.0</configuration>
+    <operating_system>UNKNOWN</operating_system>
+  </additional_information>
+</service_identification_report>
+
+127.0.0.1:9002
+<service_identification_report>
+  <service_name>ZeroMQ</service_name>
+  <service_version>ZMTP 2.0</service_version>
+  <port>9002</port>
+  <ip>127.0.0.1</ip>
+  <protocol>tcp</protocol>
+  <additional_information>
+    <framework>ZeroMQ</framework>
+    <configuration>Default configuration</configuration>
+    <operating_system>UNKNOWN</operating_system>
+  </additional_information>
+</service_identification_report>
+
+127.0.0.1:9003
+<service_identification_report>
+  <service_name>ZeroMQ</service_name>
+  <service_version>ZMTP 2.0</service_version>
+  <port>9003</port>
+  <ip>127.0.0.1</ip>
+  <protocol>tcp</protocol>
+  <additional_information>
+    <framework>ZeroMQ</framework>
+    <configuration>Unknown</configuration>
+    <operating_system>Unknown</operating_system>
+  </additional_information>
+</service_identification_report>
+
+127.0.0.1:9009
+<service_identification_report>
+  <service_name>ZeroMQ</service_name>
+  <service_version>ZMTP 2.0</service_version>
+  <port>9009</port>
+  <ip>127.0.0.1</ip>
+  <protocol>tcp</protocol>
+  <additional_information>
+    Framework: ZeroMQ
+    Configuration: Not available
+    Operating System: Not available
+  </additional_information>
+</service_identification_report>
+

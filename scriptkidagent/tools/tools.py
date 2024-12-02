@@ -130,3 +130,107 @@ def execute_in_bash(command: str) -> str:
         return output
     except Exception as e:
         return f"Error running command: {e}"
+
+
+
+from openhands.agenthub.browsing_agent.browsing_agent import BrowsingAgent
+from openhands.core.config.agent_config import AgentConfig
+from openhands.controller.state.state import State
+from openhands.runtime.browser import browse
+from openhands.runtime.browser.browser_env import BrowserEnv
+from openhands.events.action import BrowseInteractiveAction, MessageAction, AgentFinishAction
+from openai import OpenAI
+import asyncio
+import os
+
+client = OpenAI(api_key=os.environ['OPENAI_API_KEY'], base_url=os.environ['OPENAI_API_BASE'])
+
+# Define the model to use
+model_name = "gpt-4o"
+
+config = AgentConfig(
+    codeact_enable_browsing=True,
+    codeact_enable_llm_editor=False,
+    codeact_enable_jupyter=True,
+    micro_agent_name=None,
+    memory_enabled=False,
+    memory_max_threads=3,
+    llm_config=None,
+    use_microagents=True,
+    disabled_microagents=None,
+)
+
+
+# Define a helper class or function for the LLM
+class LLM:
+    def __init__(self, model_name):
+        self.model_name = model_name
+
+    def completion(self, messages, stop=None):
+        return client.chat.completions.create(model=self.model_name,
+        messages=messages,
+        stop=stop)
+
+    @staticmethod
+    def format_messages_for_llm(messages):
+        # Handles Message objects
+        return [{"role": msg.role, "content": msg.content} for msg in messages]
+    def reset(self):
+        pass
+
+# Initialize the LLM object
+llm = LLM(model_name)
+
+def summarize_result(state, ba):
+    summary_requirement = MessageAction(content = "Since you have searched too many times, stop doing any web-related actions right now and summarize the result so far.")
+    summary_requirement._source='user'
+    state.history.append(summary_requirement)
+    browser_action = ba.step(state)
+    if isinstance(browser_action, BrowseInteractiveAction) and browser_action.browsergym_send_msg_to_user:
+        print(browser_action.browsergym_send_msg_to_user)
+        print("Reply to the user")
+        return browser_action.browsergym_send_msg_to_user
+    else:
+        return "The searching agent has not found the answer."
+    
+
+@tools.tool
+def search_in_web(task = "Search and tell me is what is CVE2024-38077?"):
+    """
+
+    Run a searching agent to search the web for the task and return the output.
+    The task input can be any sentence, question, or command.
+
+    Args:
+        task (str): The task to run.
+
+    Returns:
+        str: The execution results of the task.
+    """
+
+    state = State()
+    state.inputs['task'] = task
+    ba = BrowsingAgent(llm=llm, config=config)
+    browser_env = BrowserEnv()
+    for i in range(20):
+        browser_action = ba.step(state)
+        if isinstance(browser_action, BrowseInteractiveAction) and browser_action.browsergym_send_msg_to_user:
+            print(browser_action.browsergym_send_msg_to_user)
+            print("Reply to the user")
+            return browser_action.browsergym_send_msg_to_user
+        print("browser action", browser_action)
+        if isinstance(browser_action, BrowseInteractiveAction):
+            browser_observation = browse(browser_action, browser_env)
+            obs = asyncio.run(browser_observation)
+            state.history.append(obs)
+        elif isinstance(browser_action, MessageAction):
+            print(browser_action.content)
+            print("we are done with message")
+            return summarize_result(state, ba)
+        elif isinstance(browser_action, AgentFinishAction):
+            print(browser_action.content)
+            print("we are done with agent finish")
+            return summarize_result(state, ba)
+    print("run 20 times but not done")
+    return summarize_result(state, ba)
+

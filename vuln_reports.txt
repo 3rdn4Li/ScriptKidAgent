@@ -1,0 +1,30 @@
+127.0.0.1:111
+<vulnerability_identification_report>
+  <vulnerability_id>CVE-2017-8779</vulnerability_id>
+  <vulnerability_description>rpcbind denial of service vulnerability</vulnerability_description>
+  <capabilities>['Denial of Service']</capabilities>
+  <additional_information>
+    How to exploit in Metasploit: No direct Metasploit module available.
+    How to exploit using exploitdb to exploit: Use the exploit script available at `linux/dos/41974.rb` from ExploitDB.
+    Framework: UNKNOWN
+    Configuration: UNKNOWN
+    Operating System: UNKNOWN
+    Environment: UNKNOWN
+    Affected Versions: rpcbind versions before 0.2.3
+    Patch Availability: Patch available in rpcbind version 0.2.3 and later.
+    Exploitation Details: The vulnerability can be exploited by sending a specially crafted request to the rpcbind service, causing it to crash.
+  </additional_information>
+  <service_identification_report>
+  <service_name>rpcbind</service_name>
+  <service_version>2-4</service_version>
+  <port>111</port>
+  <ip>127.0.0.1</ip>
+  <protocol>tcp</protocol>
+  <additional_information>
+    <framework>UNKNOWN</framework>
+    <configuration>UNKNOWN</configuration>
+    <operating_system>UNKNOWN</operating_system>
+  </additional_information>
+</service_identification_report>
+</vulnerability_identification_report>
+
