@@ -8,4 +8,4 @@ scriptkidagent/volumes
 **/exp_reports.txt
 **/service_reports.txt
 **/vuln_reports.txt
-metasploitable3-workspace
+metasploitable3-workspace/.vagrant

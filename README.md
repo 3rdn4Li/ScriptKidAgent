@@ -25,10 +25,6 @@ scriptkid --ip_segment 127.0.0.1
 
 ## Test metasploitable2&3 for example
 
-```shell
-docker network create --subnet=172.19.0.0/16 --gateway=172.19.0.1 pentest 
-```
-
 ### setup scriptkid docker
 
 ```shell
@@ -45,14 +41,23 @@ scriptkid:latest
 
 ### setup metasploitable 2&3
 
+- metasploitable2
+
 ```shell
+# create docker network for metasploitable2
+docker network create --subnet=172.19.0.0/16 --gateway=172.19.0.1 scriptkid 
 docker pull tleemcjr/metasploitable2
 docker run --network=pentest --ip 172.19.0.2 -h victim -d --rm --name metasploitable2 tleemcjr/metasploitable2
 #docker run --network=pentest --ip 172.19.0.3 -h victim3 -d --rm --name metasploitable3 heywoodlh/vulnerable
+```
+
+- metasploitable3
+
+```shell
 # metasploitable3 with vagrant
-mkdir metasploitable3-workspace
 cd metasploitable3-workspace
-curl -O https://raw.githubusercontent.com/rapid7/metasploitable3/master/Vagrantfile && vagrant up
+vagrant up
+
 # check ip
 docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' metasploitable2
 ```
