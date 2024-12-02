@@ -96,3 +96,56 @@ class VulnReport:
             int: The hash value of the object.
         """
         return hash(str(self))
+
+
+class ExpReport:
+    def __init__(self, service_report,
+                 vulnerability_report,
+                 is_success,
+                 capabilities: str,
+                 if_shell: str,
+                 if_root: str,
+                 message_history: list,
+                 ):
+        """
+        Initializes the VulnReport object.
+
+        Args:
+            service_report (ServiceReport): The service report associated with the vulnerability.
+            vulnerability_id (str): The ID of the vulnerability.
+            vulnerability_description (str): A description of the vulnerability.
+            additional_information (str): Additional information about the vulnerability.
+        """
+        self.service_report = service_report
+        self.vulnerability_report = vulnerability_report
+        self.is_success=is_success
+        self.capabilities = capabilities
+        self.if_shell = if_shell
+        self.if_root = if_root
+        self.message_history = message_history
+
+    def __str__(self):
+        """
+        Converts the VulnReport object to a formatted string in the specified XML format.
+
+        Returns:
+            str: The vulnerability identification report as a string.
+        """
+        report = f'<exploitation_report>\n'
+        report += f'  <exploitation_capabilities>{self.capabilities}</exploitation_capabilities>\n'
+        report += f'  <exploitation_ifshell>{self.if_shell}</exploitation_ifshell>\n'
+        report += f'  <exploitation__ifroot>{self.if_root}</exploitation_ifroot>\n'
+        report += f'  <exploitation_message_history>\n    {str(self.message_history)}\n  </exploitation_message_history>\n'
+        report += f'  {str(self.service_report)}\n'
+        report += f'  {str(self.vulnerability_report)}\n'
+        report += f'</exploitation_report>'
+        return report
+
+    def __hash__(self):
+        """
+        Returns a hash value for the object based on its string representation.
+
+        Returns:
+            int: The hash value of the object.
+        """
+        return hash(str(self))

@@ -6,7 +6,7 @@ from scriptkidagent.stages.stage_infomation_gathering.common import scan_ip_segm
 from scriptkidagent.stages.stage_infomation_gathering.agents.identify_service_agent import IdentifyServiceAgent
 from scriptkidagent.stages.stage_vuln_identification.agents.identify_vuln_agent import IdentifyVulnAgent
 from scriptkidagent.stages.stage_exploitation.exploit_agent import ExploitAgent
-from scriptkidagent.models import ServiceReport, VulnReport
+from scriptkidagent.models import ServiceReport, VulnReport, ExpReport
 
 
 class ScriptKidAgent:
@@ -15,6 +15,7 @@ class ScriptKidAgent:
         self.ip_segment = ip_segment
         self.ip_to_port_to_service_reports = {}
         self.ip_to_port_to_vuln_reports = {}
+        self.ip_to_port_to_exploit_reports = {}
         self.ip_to_protocol_to_ports = {}
         # ip to process object that is a shell
         self.ip_to_shell = {}
@@ -87,11 +88,31 @@ class ScriptKidAgent:
                     f.write(f"{ip}:{port}\n")
                     f.write(f"{vuln_report}\n\n")
 
-        breakpoint()
         for ip, port_to_vuln_report in self.ip_to_port_to_vuln_reports.items():
             for port, vuln_report in port_to_vuln_report.items():
                 exploit_agent = ExploitAgent(ip, vuln_report.service_report.port, vuln_report)
-                exploit_agent.exploit()
+                exp_success, exp_temp_report, process = exploit_agent.exploit()
+
+                exp_report = ExpReport(
+                    service_report=self.ip_to_port_to_service_reports[ip][port],
+                    vulnerability_report=self.ip_to_port_to_vuln_reports[ip][port],
+                    if_success=exp_success,
+                    capabilities=exp_temp_report["capabilities"],
+                    if_shell=exp_temp_report["if_shell"],
+                    if_root=exp_temp_report["if_root"],
+                    message_history=exp_temp_report["message_history"]
+                )
+                if ip not in self.ip_to_port_to_exploit_reports:
+                    self.ip_to_port_to_exploit_reports[ip] = dict()
+                self.ip_to_port_to_exploit_reports[ip][port] = exp_report
+
+        if os.path.exists("exp_reports.txt"):
+            os.remove("exp_reports.txt")
+        with open("exp_reports.txt", "w+") as f:
+            for ip, port_to_expn_report in self.ip_to_port_to_exploit_reports.items():
+                for port, exp_report in port_to_expn_report.items():
+                    f.write(f"{ip}:{port}\n")
+                    f.write(f"{exp_report}\n\n")
 
         # # for lateral movement
         # while self.ip_to_new_shell:

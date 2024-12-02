@@ -8,6 +8,7 @@ from scriptkidagent.models import ServiceReport
 
 TOOLS = {"execute_in_bash": execute_in_bash}
 
+
 class VulnReportParser(BaseParser):
     # Extra cost that we need to keep track when we do LLM calls
     llm_extra_calls_cost = 0
@@ -101,27 +102,31 @@ class VulnReportParser(BaseParser):
         """
         try_itr = 1
         while try_itr <= 3:
-            m = re.search(r'<vulnerability_identification_report>([\s\S]*?)</vulnerability_identification_report>', text)
+            m = re.search(r'<vulnerability_identification_report>([\s\S]*?)</vulnerability_identification_report>',
+                          text)
             if m:
                 try:
                     vulnerability_info = self.extract_vulnerability_info(m.group(0))
-                    print(f'✅ Regexp-Parser: Successfully parsed the vulnerability identification report from the output!')
+                    print(
+                        f'✅ Regexp-Parser: Successfully parsed the vulnerability identification report from the output!')
                     return vulnerability_info
                 except Exception as e:
                     print(f'🤡 Regexp-Error: Error parsing the vulnerability identification report - {e}')
-                    print(f'🤡 Regexp-Error: Trying to fix the format of the vulnerability identification report... Attempt {try_itr}!')
+                    print(
+                        f'🤡 Regexp-Error: Trying to fix the format of the vulnerability identification report... Attempt {try_itr}!')
                     text = self.fix_format(text)
             else:
                 print(f'🤡 Regexp-Error: Could not parse the vulnerability identification report from the output!')
-                print(f'🤡 Regexp-Error: Trying to fix the format of the vulnerability identification report... Attempt {try_itr}!')
+                print(
+                    f'🤡 Regexp-Error: Trying to fix the format of the vulnerability identification report... Attempt {try_itr}!')
                 text = self.fix_format(text)
             try_itr += 1
 
         raise Exception('Failed to parse the vulnerability identification report after multiple attempts!')
 
 
-class IdentifyVulnAgent(AgentWithHistory[dict,str]):
-    __LLM_MODEL__ = 'gpt-4o'
+class IdentifyVulnAgent(AgentWithHistory[dict, str]):
+    __LLM_MODEL__ = 'gpt-4o-2024-08-06'
     current_file_path = Path(__file__).resolve()
 
     __SYSTEM_PROMPT_TEMPLATE__ = str(
@@ -133,17 +138,17 @@ class IdentifyVulnAgent(AgentWithHistory[dict,str]):
     # Extra cost that we need to keep track when we do LLM calls
     extra_calls_cost = 0
     SERVICE_REPORT_STR: str
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.SERVICE_REPORT_STR = kwargs.get('SERVICE_REPORT_STR')
-        
+
     def get_input_vars(self, *args, **kw):
         # Any returned dict will be use as an input to template the prompts
         # of this agent.
         vars = super().get_input_vars(*args, **kw)
         vars.update(
-            SERVICE_REPORT_STR = self.SERVICE_REPORT_STR
+            SERVICE_REPORT_STR=self.SERVICE_REPORT_STR
         )
         return vars
 
