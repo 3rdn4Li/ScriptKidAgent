@@ -122,7 +122,7 @@ class ServiceReportParser(BaseParser):
 
 
 class IdentifyServiceAgent(AgentWithHistory[dict, str]):
-    __LLM_MODEL__ = 'gpt-4o'
+    __LLM_MODEL__ = 'gpt-4o-2024-08-06'
     current_file_path = Path(__file__).resolve()
 
     __SYSTEM_PROMPT_TEMPLATE__ = str(

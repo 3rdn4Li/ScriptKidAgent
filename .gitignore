@@ -5,3 +5,7 @@ pipeline.lock
 scriptkidagent/volumes
 .env
 .vscode
+**/exp_reports.txt
+**/service_reports.txt
+**/vuln_reports.txt
+metasploitable3-workspace/.vagrant
