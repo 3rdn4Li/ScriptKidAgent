@@ -77,6 +77,18 @@ class ServiceReportParser(BaseParser):
             raise Exception('Service version not found in the report!')
         service_version = service_version_match.group(1).strip()
 
+        # Extract <website_framework>
+        website_framework_match = re.search(r'<website_framework>(.*?)</website_framework>', report, re.DOTALL)
+        if not website_framework_match:
+            raise Exception('Website framework not found in the report!')
+        website_framework = website_framework_match.group(1).strip()
+
+        # Extract <website_framework_version>
+        website_framework_version_match = re.search(r'<website_framework_version>(.*?)</website_framework_version>', report, re.DOTALL)
+        if not website_framework_version_match:
+            raise Exception('Website framework version not found in the report!')
+        website_framework_version = website_framework_version_match.group(1).strip()
+
 
         # Extract <additional_information>
         additional_info_match = re.search(r'<additional_information>(.*?)</additional_information>', report, re.DOTALL)
@@ -85,10 +97,13 @@ class ServiceReportParser(BaseParser):
         additional_info = additional_info_match.group(1).strip()
 
         # Combine extracted information
+        
         service_report = {
             "protocol": protocol,
             "service_name": service_name,
             "service_version": service_version,
+            "website_framework": website_framework,
+            "website_framework_version": website_framework_version,
             "additional_information": additional_info
         }
 

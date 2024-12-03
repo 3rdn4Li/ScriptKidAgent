@@ -3,10 +3,26 @@ You are provided with the following target information:
 Target IP: {{TARGET_IP}}
 Target Port: {{TARGET_PORT}}
 Target Protocol: {{TARGET_PROTOCOL}}
-Your task is to identify the service version and gather all possible information about the target service, including details such as the framework and version for web services. A shell is provided for your use, and it has tools like nmap, curl, and others pre-installed.
 
+Your task is to identify the service version and gather all possible information about the target service.
+A shell is provided for your use, and it has tools like nmap, curl, and others pre-installed.
 You should focus on collecting comprehensive information about the service and its environment.
-The more information you can gather, the better. You should try all possible methods to identify the service version and gather information about the target service.
-For example, if it's a http service, you can try to request some common paths. If it's a ftp service, you can try to list the files in the ftp server.
+You should try all possible methods to identify the service version and gather information about the target service.
+
+Especially, if the Protocol is HTTP or HTTPS, both of which are TCP, you should not only collect the reponse header but also the content of the index , the title, the framework and version for web services, which means you should use curl without `-I` option.
+For example, when using curl, you should send requests with the followings headers:
+```
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate
+Accept-Language: en,zh-CN;q=0.9,zh;q=0.8
+Connection: keep-alive
+Host:
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+```
+
+The more information you can gather, the better.  
+
+For example, if it's a ftp service, you can try to list the files in the ftp server.
 
 {{output_format}}
