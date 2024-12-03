@@ -7,12 +7,13 @@ def is_root():
     return os.geteuid() == 0
 
 
-def scan_ip_segment(ip_segment: str) -> Dict[str, Dict[str, List[int]]]:
+def scan_ip_segment(ip_segment: str, proxy=None) -> Dict[str, Dict[str, List[int]]]:
     """
     Scans the given IP segment using nmap to find all online hosts and their open ports for all protocols.
 
     Args:
         ip_segment (str): The IP segment to scan, e.g., '192.168.1.0/24'.
+        proxy (Proxy): A Proxy object to use for scanning.
 
     Returns:
         Dict[str, Dict[str, List[int]]]: A dictionary where keys are IP addresses, and values are dictionaries
@@ -22,20 +23,37 @@ def scan_ip_segment(ip_segment: str) -> Dict[str, Dict[str, List[int]]]:
         print(f"Scanning IP segment: {ip_segment} for all protocols...")
         # Run the nmap command for TCP, UDP, and other protocols
         if is_root():
-            result = subprocess.run(
-                ['nmap', '-sS', '-sU', '-T4', '-n', '-oX', '-', ip_segment],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True
-            )
+            if not proxy:
+                result = subprocess.run(
+                    ['nmap', '-sS', '-sU', '-T4', '-n', '-oX', '-', ip_segment],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True
+                )
+            else:
+                result = subprocess.run(
+                    ['proxychains4', '-f', proxy.proxychain_config_file , 'nmap', '-sS', '-sU', '-T4', '-n', '-oX', '-', ip_segment],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True
+                )
         else:
             print("Warning: Running nmap as a non-root user. Some scans may not work.")
-            result = subprocess.run(
-                ['nmap', '-sT', '-T4', '-n', '-oX', '-', ip_segment],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True
-            )
+            if not proxy:
+                result = subprocess.run(
+                    ['nmap', '-sT', '-T4', '-n', '-oX', '-', ip_segment],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True
+                )
+            else:
+                result = subprocess.run(
+                    ['proxychains4','-f', proxy.proxychain_config_file, 'nmap', '-sT', '-T4', '-n', '-oX', '-', ip_segment],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True
+                )
+                
 
         if result.returncode != 0:
             print(f"Error during nmap scan: {result.stderr}")

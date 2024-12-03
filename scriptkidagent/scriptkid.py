@@ -7,16 +7,18 @@ from scriptkidagent.stages.stage_infomation_gathering.agents.identify_service_ag
 from scriptkidagent.stages.stage_vuln_identification.agents.identify_vuln_agent import IdentifyVulnAgent
 from scriptkidagent.stages.stage_exploitation.exploit_agent import ExploitAgent
 from scriptkidagent.models import ServiceReport, VulnReport, ExpReport
+from .utils import Proxy
 
 
 class ScriptKidAgent:
-    def __init__(self, ip_segment: str):
+    def __init__(self, ip_segment: str, proxy=None):
         self.total_cost = 0
         self.ip_segment = ip_segment
         self.ip_to_port_to_service_reports = {}
         self.ip_to_port_to_vuln_reports = {}
         self.ip_to_port_to_exploit_reports = {}
         self.ip_to_protocol_to_ports = {}
+        self.proxy = proxy
         # ip to process object that is a shell
         self.ip_to_shell = {}
 
@@ -25,7 +27,7 @@ class ScriptKidAgent:
         # self.ip_to_new_shell = {}
 
     def start(self):
-        self.ip_to_protocol_to_ports = scan_ip_segment(self.ip_segment)
+        self.ip_to_protocol_to_ports = scan_ip_segment(self.ip_segment,self.proxy)
         print(self.ip_to_protocol_to_ports)
         for ip, protocols in self.ip_to_protocol_to_ports.items():
             for protocol, ports in protocols.items():
@@ -90,7 +92,7 @@ class ScriptKidAgent:
 
         for ip, port_to_vuln_report in self.ip_to_port_to_vuln_reports.items():
             for port, vuln_report in port_to_vuln_report.items():
-                exploit_agent = ExploitAgent(ip, vuln_report.service_report.port, vuln_report)
+                exploit_agent = ExploitAgent(ip, vuln_report.service_report.port, vuln_report, self.proxy)
                 exp_success, exp_temp_report, process = exploit_agent.exploit()
 
                 exp_report = ExpReport(
@@ -105,7 +107,14 @@ class ScriptKidAgent:
                 if ip not in self.ip_to_port_to_exploit_reports:
                     self.ip_to_port_to_exploit_reports[ip] = dict()
                 self.ip_to_port_to_exploit_reports[ip][port] = exp_report
-
+                
+                # Jimmy Added:  if the exploit is successful, save the shell process
+                if exp_temp_report["if_shell"]:
+                    if self.proxy is None:
+                        self.lateral_exploit(ip, process)
+                    # if ip not in self.ip_to_shell:
+                        # self.ip_to_shell[ip] = process
+                        
         if os.path.exists("exp_reports.txt"):
             os.remove("exp_reports.txt")
         with open("exp_reports.txt", "w+") as f:
@@ -115,17 +124,14 @@ class ScriptKidAgent:
                     f.write(f"{exp_report}\n\n")
 
         # # for lateral movement
-        # while self.ip_to_new_shell:
-
-        #     for ip, shell in self.ip_to_new_shell.items():
-        #         # let agent perform scanning using nmap, if no nmap, install nmap
-        #         # check whether the returned ip and port is in the ip_to_protocol_to_ports
-        #         # if not, add it to the controlledip_to_new_targets
-        #         pass
-
-        #     for ip, new_targets in self.controlledip_to_new_targets.items():
-        #         # let agent perform information gathering, vuln identification, and exploitation on the new targets
-        #         pass
+    def lateral_exploit(self, ip, process):
+        port = 60000
+        for ip in  self.ip_to_shell:
+            process = self.ip_to_shell[ip]
+            proxy = Proxy(ip, port, process)
+            proxy.setup()
+            port -= 1
+            
 
 
 def main():
