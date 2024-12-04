@@ -79,6 +79,7 @@ class ScriptKidAgent:
                         )
                         if ip not in self.ip_to_port_to_vuln_reports:
                             self.ip_to_port_to_vuln_reports[ip] = dict()
+                        if port not in self.ip_to_port_to_vuln_reports[ip]:
                             self.ip_to_port_to_vuln_reports[ip][port] = []
                         self.ip_to_port_to_vuln_reports[ip][port].append(vuln_report)
         
