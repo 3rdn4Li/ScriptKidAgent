@@ -74,10 +74,10 @@ def execute_in_msfconsole(process, command: str, timeout=20) -> tuple[str | Any,
     return output, is_blocked
 
 @tools.tool
-def execute_one_cmd_in_msfconsole(command: str, timeout=20) -> str:
+def execute_cmds_in_msfconsole(commands: list[str], timeout=20) -> str:
     """
-    Executes a command in msfconsole and returns the result. Note that this command is stateless and will not be able to interact with the msfconsole session.
-
+    Executes a list of commands in msfconsole and returns the result. Note that this command is stateless and will not be able to interact with the previous msfconsole session.
+    
     Args:
         command (str): The command to execute in msfconsole.
         
@@ -88,8 +88,10 @@ def execute_one_cmd_in_msfconsole(command: str, timeout=20) -> str:
     io = process(["msfconsole", "-q", "--no-readline"],
                                env={"HOME": os.environ['HOME'], "TERM": "dumb"})
     io.recvuntil(b'> ')
-    io.sendline(command)
-    output, _ = read_output(io, timeout=timeout)
+    output = ""
+    for command in commands:
+        io.sendline(command)
+        output, _ = read_output(io, timeout=timeout)
     io.close()
     return output
 
