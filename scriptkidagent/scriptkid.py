@@ -66,47 +66,50 @@ class ScriptKidAgent:
             for port, service_report in port_to_service_report.items():
                 identify_vuln_agent = IdentifyVulnAgent(SERVICE_REPORT_STR=str(service_report))
                 res = identify_vuln_agent.invoke()
-                vuln_report_raw = res.value
+                vuln_report_raws = res.value
                 self.total_cost += identify_vuln_agent.get_cost()
-                
-                if vuln_report_raw and vuln_report_raw["vulnerability_id"].lower() != "unknown":
-                    vuln_report = VulnReport(
-                        service_report=self.ip_to_port_to_service_reports[ip][port],
-                        vulnerability_id=vuln_report_raw["vulnerability_id"],
-                        capabilities=vuln_report_raw["capabilities"],
-                        vulnerability_description=vuln_report_raw["vulnerability_description"],
-                        additional_information=vuln_report_raw["additional_information"]
-                    )
-                    if ip not in self.ip_to_port_to_vuln_reports:
-                        self.ip_to_port_to_vuln_reports[ip] = dict()
-                    self.ip_to_port_to_vuln_reports[ip][port] = vuln_report
+                for vuln_report_raw in vuln_report_raws:                
+                    if vuln_report_raw and vuln_report_raw["vulnerability_id"].lower() != "unknown":
+                        vuln_report = VulnReport(
+                            service_report=self.ip_to_port_to_service_reports[ip][port],
+                            vulnerability_id=vuln_report_raw["vulnerability_id"],
+                            capabilities=vuln_report_raw["capabilities"],
+                            vulnerability_description=vuln_report_raw["vulnerability_description"],
+                            additional_information=vuln_report_raw["additional_information"]
+                        )
+                        if ip not in self.ip_to_port_to_vuln_reports:
+                            self.ip_to_port_to_vuln_reports[ip] = dict()
+                            self.ip_to_port_to_vuln_reports[ip][port] = []
+                        self.ip_to_port_to_vuln_reports[ip][port].append(vuln_report)
         
         # Save the vuln reports to a file
         if os.path.exists("vuln_reports.txt"):
             os.remove("vuln_reports.txt")
         with open("vuln_reports.txt", "w+") as f:
             for ip, port_to_vuln_report in self.ip_to_port_to_vuln_reports.items():
-                for port, vuln_report in port_to_vuln_report.items():
-                    f.write(f"{ip}:{port}\n")
-                    f.write(f"{vuln_report}\n\n")
+                for port, vuln_reports in port_to_vuln_report.items():
+                    f.write(f"################## {ip}:{port} ##################\n")
+                    f.write(f"{vuln_reports}\n\n")
+                    f.write(f"################## END {ip}:{port} ##################\n")
 
-        for ip, port_to_vuln_report in self.ip_to_port_to_vuln_reports.items():
-            for port, vuln_report in port_to_vuln_report.items():
-                exploit_agent = ExploitAgent(ip, vuln_report.service_report.port, vuln_report)
-                exp_success, exp_temp_report, process = exploit_agent.exploit()
+        for ip, port_to_vuln_reports in self.ip_to_port_to_vuln_reports.items():
+            for port, vuln_reports in port_to_vuln_reports.items():
+                for vuln_report in vuln_reports:
+                    exploit_agent = ExploitAgent(ip, vuln_report.service_report.port, vuln_report)
+                    exp_success, exp_temp_report, process = exploit_agent.exploit()
 
-                exp_report = ExpReport(
-                    service_report=self.ip_to_port_to_service_reports[ip][port],
-                    vulnerability_report=self.ip_to_port_to_vuln_reports[ip][port],
-                    is_success=exp_success,
-                    capabilities=exp_temp_report["capabilities"],
-                    if_shell=exp_temp_report["if_shell"],
-                    if_root=exp_temp_report["if_root"],
-                    message_history=exp_temp_report["message_history"]
-                )
-                if ip not in self.ip_to_port_to_exploit_reports:
-                    self.ip_to_port_to_exploit_reports[ip] = dict()
-                self.ip_to_port_to_exploit_reports[ip][port] = exp_report
+                    exp_report = ExpReport(
+                        service_report=self.ip_to_port_to_service_reports[ip][port],
+                        vulnerability_report=self.ip_to_port_to_vuln_reports[ip][port],
+                        is_success=exp_success,
+                        capabilities=exp_temp_report["capabilities"],
+                        if_shell=exp_temp_report["if_shell"],
+                        if_root=exp_temp_report["if_root"],
+                        message_history=exp_temp_report["message_history"]
+                    )
+                    if ip not in self.ip_to_port_to_exploit_reports:
+                        self.ip_to_port_to_exploit_reports[ip] = dict()
+                    self.ip_to_port_to_exploit_reports[ip][port] = exp_report
 
         if os.path.exists("exp_reports.txt"):
             os.remove("exp_reports.txt")

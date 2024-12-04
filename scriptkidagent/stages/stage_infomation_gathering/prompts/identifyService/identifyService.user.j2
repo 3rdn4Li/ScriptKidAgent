@@ -8,6 +8,7 @@ Your task is to identify the service version and gather all possible information
 A shell is provided for your use, and it has tools like nmap, curl, and others pre-installed.
 You should focus on collecting comprehensive information about the service and its environment.
 You should try all possible methods to identify the service version and gather information about the target service.
+Even if you discover the version of a service using one command or tool, verify it with other commands or tools whenever possible.
 
 Especially, if the Protocol is HTTP or HTTPS, both of which are TCP, you should not only collect the reponse header but also the content of the index , the title, the framework and version for web services, which means you should use curl without `-I` option.
 For example, when using curl, you should send requests with the followings headers:

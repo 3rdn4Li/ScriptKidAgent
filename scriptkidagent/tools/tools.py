@@ -1,7 +1,9 @@
 import re
 import subprocess
 import time
+import os
 from typing import Any
+from pwn import *
 
 from agentlib.lib import tools
 
@@ -70,6 +72,26 @@ def execute_in_msfconsole(process, command: str, timeout=20) -> tuple[str | Any,
     process.sendline(command)
     output, is_blocked = read_output(process, timeout=timeout)
     return output, is_blocked
+
+@tools.tool
+def execute_one_cmd_in_msfconsole(command: str, timeout=20) -> str:
+    """
+    Executes a command in msfconsole and returns the result. Note that this command is stateless and will not be able to interact with the msfconsole session.
+
+    Args:
+        command (str): The command to execute in msfconsole.
+        
+    Returns:
+        str: The output of the command.
+    """
+    # this should be painful as we need to interact with a console with tty
+    io = process(["msfconsole", "-q", "--no-readline"],
+                               env={"HOME": os.environ['HOME'], "TERM": "dumb"})
+    io.recvuntil(b'> ')
+    io.sendline(command)
+    output, _ = read_output(io, timeout=timeout)
+    io.close()
+    return output
 
 
 @tools.tool
