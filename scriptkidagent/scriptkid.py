@@ -90,7 +90,8 @@ class ScriptKidAgent:
             for ip, port_to_vuln_report in self.ip_to_port_to_vuln_reports.items():
                 for port, vuln_reports in port_to_vuln_report.items():
                     f.write(f"################## {ip}:{port} ##################\n")
-                    f.write(f"{vuln_reports}\n\n")
+                    for vuln_report in vuln_reports:
+                        f.write(f"{vuln_report}\n\n")
                     f.write(f"################## END {ip}:{port} ##################\n")
 
         for ip, port_to_vuln_reports in self.ip_to_port_to_vuln_reports.items():
