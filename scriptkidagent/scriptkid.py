@@ -38,7 +38,7 @@ class ScriptKidAgent:
                     self.total_cost += identify_service_agent.get_cost()
 
                     # convert this into a ServiceReport object
-                    if service_report_raw and service_report_raw["service_name"].lower() != "unknown" and service_report_raw["service_version"].lower() != "unknown":
+                    if service_report_raw and service_report_raw["service_name"].lower() != "unknown" and service_report_raw["service_version"].lower() != "unknown" or service_report_raw["website_framework"].lower() != "unknown":
                         service_report = ServiceReport(
                             service_name=service_report_raw["service_name"],
                             service_version=service_report_raw["service_version"],

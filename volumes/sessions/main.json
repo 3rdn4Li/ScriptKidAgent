@@ -1,0 +1,17 @@
+{
+  "lc": 1,
+  "type": "constructor",
+  "id": [
+    "agentlib.lib.web_console",
+    "RecordSession"
+  ],
+  "kwargs": {
+    "id": "010d7df2-0b65-4148-a204-65966ad6dc46",
+    "filepath": "volumes/sessions/main.json",
+    "name": "main",
+    "other": [
+      "56af49e6-1018-49e1-acab-3d55bed4aba9"
+    ],
+    "top_level_agents": []
+  }
+}
