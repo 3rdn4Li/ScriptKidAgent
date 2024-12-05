@@ -13,8 +13,8 @@ schema_execute_in_msfconsole = {
     }
 }
 
-schema_finish_with_report ={
-    "name": "finish_with_report",
+schema_success_exploited ={
+    "name": "success_exploited",
     "description": "Generates a final exploit report. Only call this function when the exploitation is successful, otherwise do not call this function.",
     "parameters": {
         "type": "object",
