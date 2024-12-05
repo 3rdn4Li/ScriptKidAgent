@@ -2,10 +2,10 @@ import re
 from agentlib import AgentWithHistory, LLMFunction
 from pathlib import Path
 from typing import Dict
-from scriptkidagent.tools.tools import execute_in_bash
+from scriptkidagent.tools.tools import execute_in_bash, execute_cmds_in_msfconsole
 from agentlib.lib.common.parsers import BaseParser
 
-TOOLS = {"execute_in_bash": execute_in_bash}
+TOOLS = {"execute_in_bash": execute_in_bash, "execute_cmds_in_msfconsole": execute_cmds_in_msfconsole}
 
 
 class ServiceReportParser(BaseParser):

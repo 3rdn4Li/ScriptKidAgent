@@ -4,6 +4,12 @@ Target SERVICE: {{SERVICE_REPORT_STR}}
 
 Your task is to identify possible vulnerabilities associated with the target service.
 
+You should always start with searching the exploit corresponding to the service and version in metasploit, with execute_cmds_in_msfconsole function. Then, use other tools and commands to identify vulnerabilities, such as nmap, and searchsploit, and the internet or your inherent knowledge. DO NOT STOP at the first vulnerability you find, ONLY stop when you are sure that you have identified all possible vulnerabilities.
+
+You need to use all possible methods to comprehensively identify vulnerabilities and their associated details. Even if you discover a vulnerability using one command or tool, verify it with other commands or tools whenever possible.
+
+If there are multiple vulnerabilities, you should identify all of them.
+
 If the website_framework is not UNKNOWN, just focus on website_framework and website_framework_version.
 
 This includes identifying vulnerabilities such as CVE IDs, CNVD IDs, or other relevant identifiers. For each vulnerability, provide a brief description of the issue, as well as details about the capabilities the vulnerability can provide (e.g., remote code execution, privilege escalation, information disclosure).

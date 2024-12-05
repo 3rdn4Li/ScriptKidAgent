@@ -4,6 +4,7 @@ pipeline.lock
 .idea
 scriptkidagent/volumes
 .env
+.DS_Store
 .vscode
 .DS_Store
 **/exp_reports.txt

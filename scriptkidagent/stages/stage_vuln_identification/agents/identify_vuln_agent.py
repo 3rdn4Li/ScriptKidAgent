@@ -1,13 +1,12 @@
 import re
 from agentlib import AgentWithHistory, LLMFunction
 from pathlib import Path
-from typing import Dict
-from scriptkidagent.tools.tools import execute_in_bash
+from typing import Dict, List
+from scriptkidagent.tools.tools import execute_in_bash, execute_cmds_in_msfconsole
 from agentlib.lib.common.parsers import BaseParser
 from scriptkidagent.models import ServiceReport
 
-TOOLS = {"execute_in_bash": execute_in_bash}
-
+TOOLS = {"execute_in_bash": execute_in_bash, "execute_cmds_in_msfconsole": execute_cmds_in_msfconsole}
 
 class VulnReportParser(BaseParser):
     # Extra cost that we need to keep track when we do LLM calls
@@ -58,7 +57,7 @@ class VulnReportParser(BaseParser):
 
     def extract_vulnerability_info(self, report: str) -> Dict:
         """
-        Extracts the vulnerability identification information from the given report.
+        Extracts the vulnerability identification information from a single vulnerability report.
         """
         # Extract <vulnerability_id>
         vuln_id_match = re.search(r'<vulnerability_id>(.*?)</vulnerability_id>', report, re.DOTALL)
@@ -96,33 +95,43 @@ class VulnReportParser(BaseParser):
 
         return vulnerability_report
 
-    def parse(self, text: str) -> Dict:
+    def parse(self, text: str) -> List[Dict]:
         """
-        Parses the vulnerability identification report, attempting to fix the format if necessary.
+        Parses the vulnerability identification reports, attempting to fix the format if necessary.
+        Returns a list of vulnerability reports.
         """
         try_itr = 1
         while try_itr <= 3:
-            m = re.search(r'<vulnerability_identification_report>([\s\S]*?)</vulnerability_identification_report>',
-                          text)
+            m = re.search(r'<vulnerability_identification_reports>([\s\S]*?)</vulnerability_identification_reports>', text)
             if m:
-                try:
-                    vulnerability_info = self.extract_vulnerability_info(m.group(0))
-                    print(
-                        f'✅ Regexp-Parser: Successfully parsed the vulnerability identification report from the output!')
-                    return vulnerability_info
-                except Exception as e:
-                    print(f'🤡 Regexp-Error: Error parsing the vulnerability identification report - {e}')
-                    print(
-                        f'🤡 Regexp-Error: Trying to fix the format of the vulnerability identification report... Attempt {try_itr}!')
+                reports_content = m.group(1)
+                report_matches = re.findall(r'<vulnerability_identification_report>([\s\S]*?)</vulnerability_identification_report>', reports_content)
+                if report_matches:
+                    vulnerability_reports = []
+                    for report_text in report_matches:
+                        try:
+                            vulnerability_info = self.extract_vulnerability_info(report_text)
+                            vulnerability_reports.append(vulnerability_info)
+                        except Exception as e:
+                            print(f'🤡 Regexp-Error: Error parsing one of the vulnerability reports - {e}')
+                            print(f'🤡 Regexp-Error: Trying to fix the format of the vulnerability identification report... Attempt {try_itr}!')
+                            text = self.fix_format(text)
+                            break  # Exit the loop to retry parsing after format fixing
+                    else:
+                        print('✅ Regexp-Parser: Successfully parsed all vulnerability identification reports from the output!')
+                        return vulnerability_reports
+                else:
+                    print(f'🤡 Regexp-Error: No <vulnerability_identification_report> entries found!')
+                    print(f'🤡 Regexp-Error: Trying to fix the format... Attempt {try_itr}!')
                     text = self.fix_format(text)
             else:
-                print(f'🤡 Regexp-Error: Could not parse the vulnerability identification report from the output!')
-                print(
-                    f'🤡 Regexp-Error: Trying to fix the format of the vulnerability identification report... Attempt {try_itr}!')
+                print(f'🤡 Regexp-Error: Could not find <vulnerability_identification_reports> in the output!')
+                print(f'🤡 Regexp-Error: Trying to fix the format... Attempt {try_itr}!')
                 text = self.fix_format(text)
             try_itr += 1
 
-        raise Exception('Failed to parse the vulnerability identification report after multiple attempts!')
+        raise Exception('Failed to parse the vulnerability identification reports after multiple attempts!')
+
 
 
 class IdentifyVulnAgent(AgentWithHistory[dict, str]):
