@@ -3,10 +3,150 @@ You are provided with the following target information:
 Target IP: {{TARGET_IP}}
 Target Port: {{TARGET_PORT}}
 Target Protocol: {{TARGET_PROTOCOL}}
-Your task is to identify the service version and gather all possible information about the target service, including details such as the framework and version for web services. A shell is provided for your use, and it has tools like nmap, curl, and others pre-installed.
+
+Your task is to identify the service version and gather all possible information about the target service.
+
+A shell is provided for your use, and it has tools like nmap, curl, and others pre-installed.
+
 
 You should focus on collecting comprehensive information about the service and its environment.
-The more information you can gather, the better. You should try all possible methods to identify the service version and gather information about the target service.
-For example, if it's a http service, you can try to request some common paths. If it's a ftp service, you can try to list the files in the ftp server.
+You should try all possible methods to identify the service version and gather information about the target service.
+
+
+
+Especially, if the Protocol is HTTP or HTTPS, both of which are TCP, you should not only collect the reponse header but also the content of the index, the title, the framework and version for web services,
+
+Here are some tools for you to fingerprint the web framework: curl, TideFinger, dismap. Don't use nmap for identifying website framework.
+
+Results for `man TideFinger`
+
+```
+TideFinger version: 2.3.1  TideFinger update: 2023.04.23
+
+Example:
+TideFinger -h 192.0.0.1/24 -p 80 -np -nobr -nopoc  	
+TideFinger -u http://www.tidesec.com -pd 		
+TideFinger -uf url.txt -nobr -nopoc -pt 120
+
+Host is none
+Usage of TideFinger:
+  -br int
+    	Brute threads (default 1)
+  -cookie string
+    	set poc cookie
+  -h string
+    	IP address of the host you want to scan,for example: 192.168.11.11 | 192.168.11.11-255 | 192.168.11.11,192.168.11.12
+  -hf string
+    	host file, -hf ip.txt
+  -level int
+    	Specify log level (0:Fatal 1:Error 2:Info 3:Warning 4:Debug 5:Verbose) (default 3)
+  -m string
+    	Select scan type ,as: -m ssh (default "all")
+  -nobr
+    	not to Brute password
+  -nopoc
+    	not to scan web vul
+  -np
+    	not to ping
+  -num int
+    	poc rate (default 20)
+  -o string
+    	Outputfile (default "result.txt")
+  -oa string
+    	OutForTideai
+  -p string
+    	Select a port,for example: 22 | 1-65535 | 22,80,3306 (default "21,22,80,81,135,139,443,445,1433,1521,3306,3389,5432,6379,7001,8000,8080,8089,9000,9200,11211,27017")
+  -pd
+    	Dispaly Poc Data
+  -ping
+    	using ping replace icmp
+  -pn string
+    	the ports no scan,as: -pn 445
+  -pocf string
+    	poc file
+  -poclevel string
+    	select the pocscan level (default "1+2+3")
+  -poclist
+    	print all poc list
+  -pocname string
+    	use the pocs these contain pocname, -pocname weblogic
+  -pocpath string
+    	poc file path
+  -portf string
+    	Port File
+  -proxy string
+    	set poc proxy, -proxy http://127.0.0.1:8080
+  -pt int
+    	Set HostProbe detect timeout (default 90)
+  -pwd string
+    	password
+  -pwda string
+    	add a password base DefaultPasses,-pwda password
+  -pwdf string
+    	password file
+  -pwt int
+    	Set poc_all timeout (default 180)
+  -silent
+    	silent scan
+  -socks5 string
+    	set socks5 proxy, will be used in tcp connection, timeout setting will not work
+  -t int
+    	Thread nums (default 2000)
+  -time int
+    	Set port connect timeout (default 3)
+  -top int
+    	show live len top (default 10)
+  -tscan
+    	use tscan mode
+  -u string
+    	url
+  -uf string
+    	urlfile
+  -user string
+    	username
+  -usera string
+    	add a user base DefaultUsers,-usera user
+  -userf string
+    	username file
+  -webproxy string
+    	Use proxy web scan, support http/socks5 protocol [e.g. -webproxy socks5://127.0.0.1:1080]
+  -wt int
+    	Set poc_web timeout (default 5)
+```
+
+Results for `man dismap`
+```
+dismap version: 0.4 release
+
+  -f, --file string     Parse the target from the specified file for batch recognition
+  -h, --help            Show help
+  -i, --ip string       Network segment [e.g. -i 192.168.1.0/24 or -i 192.168.1.1-10]
+  -j, --json string     Scan result in json format [e.g. -j r.json]
+  -l, --level int       Specify log level (0:Fatal 1:Error 2:Info 3:Warning 4:Debug 5:Verbose) (default 3)
+  -m, --mode string     Specify the protocol [e.g. -m mysql/-m http]
+      --nc              Do not print character colors
+      --np              Not use ICMP/PING to detect surviving hosts
+  -o, --output string   Save the scan results to the specified file (default "output.txt")
+  -p, --port string     Custom scan ports [e.g. -p 80,443 or -p 1-65535]
+      --proxy string    Use proxy scan, support http/socks5 protocol [e.g. --proxy socks5://127.0.0.1:1080]
+  -t, --thread int      Number of concurrent threads (default 500)
+      --timeout int     Response timeout time, the default is 5 seconds (default 5)
+      --type string     Specify the type [e.g. --type tcp/--type udp]
+  -u, --uri string      Specify a target URI [e.g. -u https://example.com]
+```
+Besides, when using curl, you should use curl without `-I` option and with the following headers:
+```
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate
+Accept-Language: en,zh-CN;q=0.9,zh;q=0.8
+Connection: keep-alive
+Host: {{TARGET_IP}}:{{TARGET_PORT}}
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+```
+
+The more information you can gather, the better.  
+
+For example, if it's a ftp service, you can try to list the files in the ftp server.
 
 {{output_format}}

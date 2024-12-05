@@ -23,7 +23,8 @@ def scan_ip_segment(ip_segment: str) -> Dict[str, Dict[str, List[int]]]:
         # Run the nmap command for TCP, UDP, and other protocols
         if is_root():
             result = subprocess.run(
-                ['nmap', '-sS', '-T4', '-n', '-oX', '-', ip_segment],
+                ['nmap', '-sS', '-T4', '-p', '8080', '-n', '-oX', '-', ip_segment],
+                # ['nmap', '-sS',  '-P', '1-10000',  ip_segment],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True

@@ -38,11 +38,14 @@ class ScriptKidAgent:
                     self.total_cost += identify_service_agent.get_cost()
 
                     # convert this into a ServiceReport object
-                    if service_report_raw and service_report_raw["service_name"].lower() != "unknown" and service_report_raw["service_version"].lower() != "unknown":
+                    # if service_report_raw and service_report_raw["service_name"].lower() != "unknown" or service_report_raw["website_framework"].lower() != "unknown":
+                    if service_report_raw and service_report_raw["service_name"].lower() != "unknown" and service_report_raw["service_version"].lower() != "unknown" or service_report_raw["website_framework"].lower() != "unknown":
                         service_report = ServiceReport(
                             service_name=service_report_raw["service_name"],
                             service_version=service_report_raw["service_version"],
                             port=str(port),
+                            website_framework=service_report_raw["website_framework"],
+                            website_framework_version=service_report_raw["website_framework_version"],
                             additional_information=service_report_raw["additional_information"],
                             ip=str(ip),
                             protocol=service_report_raw["protocol"]
@@ -50,7 +53,7 @@ class ScriptKidAgent:
                         if ip not in self.ip_to_port_to_service_reports:
                             self.ip_to_port_to_service_reports[ip] = dict()
                         self.ip_to_port_to_service_reports[ip][port] = service_report
-        
+        # import ipdb; ipdb.set_trace()
         # Save the service reports to a file
         if os.path.exists("service_reports.txt"):
             os.remove("service_reports.txt")
@@ -59,7 +62,6 @@ class ScriptKidAgent:
                 for port, service_report in port_to_service_report.items():
                     f.write(f"{ip}:{port}\n")
                     f.write(f"{service_report}\n\n")
-
         for ip, port_to_service_report in self.ip_to_port_to_service_reports.items():
             for port, service_report in port_to_service_report.items():
                 identify_vuln_agent = IdentifyVulnAgent(SERVICE_REPORT_STR=str(service_report))

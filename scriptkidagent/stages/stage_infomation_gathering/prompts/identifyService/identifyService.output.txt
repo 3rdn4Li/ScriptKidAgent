@@ -4,9 +4,15 @@ After completing the analysis, you MUST output a service identification report i
   <service_name>...</service_name>
   <service_version>...</service_version>
   <protocol>...<protocol>
+  <website>
+    <website_framework>...</website_framework>
+    <website_framework_version>...</website_framework_version>
+  </website>
+
   <additional_information>
     ...
   </additional_information>
+
 </service_identification_report>
 
 
@@ -21,9 +27,20 @@ Replace ... with the version of the identified service (e.g., 1.21.4, 8.0.25).  
 <protocol></protocol>:
 Replace ... with the protocol used by the service (e.g., tcp, udp, http, https).
 
+<website>
+Website should be a section if the service is a HTTP or HTTPS middleware. If it's a website, you should go through the whole response in the output file, and fingerprint the framework, rather than the programming language or anything else.
+Remember, you cannot easily and directly `grep` this information from the response, instead, just `cat`.
+For example, you should try to get a website_framework like Flask rather than Python.
+<website_framework></website_framework>:
+Replace ... with the framework of the website(e.g., Django, Flask, Laravel, Jenkins, Springboot, Structs etc). 
+Specifically, you should analyze the entire response in the output file, including any error responses, and make your best effort to determine which framework is most likely being used.
+If the service is not a website or you cannot identify the website framework, put 'UNKNOWN' in this field.
+<website_framework_version></website_framework_version>:
+Replace ... with the version of the framework(e.g., 1.21.4, 8.0.25). If the service is not a website or you cannot identify the framework version, put 'UNKNOWN' in this field.
+</website>
+
 <additional_information></additional_information>:
 Use this section to provide additional details about the service, including but not limited to:
-Framework: Replace ... with the framework used by the service (e.g., Django, Flask).
 Configuration: Replace ... with key configuration details (e.g., "TLS enabled", "Max connections set to 100").
 Operating System: Replace ... with the operating system on which the service is running (e.g., Ubuntu 22.04, Windows Server 2019).
 Include any other relevant information, such as runtime environment (e.g., "running in Docker containers", "hosted on AWS EC2").

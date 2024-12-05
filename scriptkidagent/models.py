@@ -4,7 +4,10 @@ class ServiceReport:
                  port: str,
                  additional_information: str,
                  ip: str,
-                 protocol: str):
+                 protocol: str,
+                 website_framework:str,
+                 website_framework_version:str
+                 ):
         """
         Initializes the ServiceReport object.
 
@@ -22,6 +25,8 @@ class ServiceReport:
         self.additional_information = additional_information
         self.ip = ip
         self.protocol = protocol
+        self.website_framework = website_framework
+        self.website_framework_version = website_framework_version
 
     def __str__(self):
         """
@@ -36,6 +41,8 @@ class ServiceReport:
         report += f'  <port>{self.port}</port>\n'
         report += f'  <ip>{self.ip}</ip>\n'
         report += f'  <protocol>{self.protocol}</protocol>\n'
+        report += f'  <website_framework>{self.website_framework}</website_framework>\n'
+        report += f'  <website_framework_version>{self.website_framework_version}</website_framework_version>\n'
         report += f'  <additional_information>\n    {self.additional_information}\n  </additional_information>\n'
         report += f'</service_identification_report>'
         return report
