@@ -69,8 +69,12 @@ def execute_in_msfconsole(process, command: str, timeout=20) -> tuple[str | Any,
 
     """
     # this should be painful as we need to interact with a console with tty
-    process.sendline(command)
-    output, is_blocked = read_output(process, timeout=timeout)
+    try:
+        process.sendline(command)
+        output, is_blocked = read_output(process, timeout=timeout)
+    except EOFError:
+        output = "EOFError, likely msfconsole has crashed or exited."
+        is_blocked = True
     return output, is_blocked
 
 @tools.tool
