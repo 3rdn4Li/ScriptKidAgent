@@ -10,9 +10,11 @@ from scriptkidagent.models import ServiceReport, VulnReport, ExpReport
 
 
 class ScriptKidAgent:
-    def __init__(self, ip_segment: str):
+    def __init__(self, ip_segment: str, lhost_ip: str, srvhost_ip: str):
         self.total_cost = 0
         self.ip_segment = ip_segment
+        self.lhost_ip = lhost_ip
+        self.srvhost_ip = srvhost_ip
         self.ip_to_port_to_service_reports = {}
         self.ip_to_port_to_vuln_reports = {}
         self.ip_to_port_to_exploit_reports = {}
@@ -96,7 +98,7 @@ class ScriptKidAgent:
         for ip, port_to_vuln_reports in self.ip_to_port_to_vuln_reports.items():
             for port, vuln_reports in port_to_vuln_reports.items():
                 for vuln_report in vuln_reports:
-                    exploit_agent = ExploitAgent(ip, vuln_report.service_report.port, vuln_report)
+                    exploit_agent = ExploitAgent(ip, self.lhost_ip, self.srvhost_ip, vuln_report.service_report.port, vuln_report)
                     exp_success, exp_temp_report, process = exploit_agent.exploit()
 
                     exp_report = ExpReport(
@@ -140,9 +142,11 @@ def main():
     """
     parser = argparse.ArgumentParser(description='ScriptKidAgent')
     parser.add_argument('--ip_segment', type=str, help='IP segment to exploit (e.g., 192.168.1.0/24) or single IP address, for test, you can use 127.0.0.1')
+    parser.add_argument('--lhost_ip', type=str, help='lhost IP address', required=False, default='You should figure out the lhost IP address')
+    parser.add_argument('--srvhost_ip', type=str, help='srvhost for metasploit', required=False, default='You should figure out the lhost IP address')
     args = parser.parse_args()
 
-    scriptkid = ScriptKidAgent(args.ip_segment)
+    scriptkid = ScriptKidAgent(args.ip_segment, args.lhost_ip, args.srvhost_ip) 
     scriptkid.start()
 
 
