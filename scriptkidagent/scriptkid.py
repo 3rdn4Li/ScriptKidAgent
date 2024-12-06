@@ -32,7 +32,7 @@ class ScriptKidAgent:
         for ip, protocols in self.ip_to_protocol_to_ports.items():
             for protocol, ports in protocols.items():
                 for port in ports:
-                    print(f"Identifying service on port {port} at {ip}, the protocol is {protocol}")
+                    print(f"####################### Identifying service on port {port} at {ip}, the protocol is {protocol} #######################")
                     identify_service_agent = IdentifyServiceAgent(TARGET_IP=ip, TARGET_PORT=port,
                                                                   TARGET_PROTOCOL=protocol)
                     res = identify_service_agent.invoke()
@@ -65,6 +65,8 @@ class ScriptKidAgent:
                     f.write(f"{service_report}\n\n")
         for ip, port_to_service_report in self.ip_to_port_to_service_reports.items():
             for port, service_report in port_to_service_report.items():
+                print(f"####################### Identifying Vuln on port {port} at {ip} #######################")
+                print(f'The service name is {service_report.service_name}')
                 identify_vuln_agent = IdentifyVulnAgent(SERVICE_REPORT_STR=str(service_report))
                 res = identify_vuln_agent.invoke()
                 vuln_report_raws = res.value
@@ -98,6 +100,8 @@ class ScriptKidAgent:
         for ip, port_to_vuln_reports in self.ip_to_port_to_vuln_reports.items():
             for port, vuln_reports in port_to_vuln_reports.items():
                 for vuln_report in vuln_reports:
+                    print(f"################## Exploiting vulnerability {vuln_report.vulnerability_id} on port {port} at {ip} ##################")
+                    print(f'The vulnerability id is {vuln_report.vulnerability_id}')
                     exploit_agent = ExploitAgent(ip, self.lhost_ip, self.srvhost_ip, vuln_report.service_report.port, vuln_report)
                     exp_success, exp_temp_report, process = exploit_agent.exploit()
 
@@ -143,7 +147,7 @@ def main():
     parser = argparse.ArgumentParser(description='ScriptKidAgent')
     parser.add_argument('--ip_segment', type=str, help='IP segment to exploit (e.g., 192.168.1.0/24) or single IP address, for test, you can use 127.0.0.1')
     parser.add_argument('--lhost_ip', type=str, help='lhost IP address', required=False, default='You should figure out the lhost IP address')
-    parser.add_argument('--srvhost_ip', type=str, help='srvhost for metasploit', required=False, default='You should figure out the lhost IP address')
+    parser.add_argument('--srvhost_ip', type=str, help='srvhost for metasploit', required=False, default='You should figure out the srvhost IP address')
     args = parser.parse_args()
 
     scriptkid = ScriptKidAgent(args.ip_segment, args.lhost_ip, args.srvhost_ip) 
