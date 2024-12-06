@@ -11,3 +11,4 @@ scriptkidagent/volumes
 **/service_reports.txt
 **/vuln_reports.txt
 metasploitable3-workspace/.vagrant
+*volumes/
