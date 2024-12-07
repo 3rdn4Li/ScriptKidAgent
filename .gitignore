@@ -7,8 +7,5 @@ scriptkidagent/volumes
 .DS_Store
 .vscode
 .DS_Store
-**/exp_reports.txt
-**/service_reports.txt
-**/vuln_reports.txt
 metasploitable3-workspace/.vagrant
 *volumes/
